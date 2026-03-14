@@ -2,10 +2,6 @@ from src.extract import extract_qkv
 from src.compress import compute_svd
 from src.evaluate import compression_experiment
 from src.plot import plot_results
-from transformers import AutoTokenizer, AutoModel
-
-tokenizer = AutoTokenizer.from_pretrained("bert-base-uncased")
-model = AutoModel.from_pretrained("bert-base-uncased")
 
 outputs, Q_head, K_head, V_head = extract_qkv()
 Uk, Sk, Vtk, Uv, Sv, Vtv = compute_svd(K_head, V_head)
