@@ -55,12 +55,12 @@ def compression_experiment(Q_layers, K_layers, V_layers, svd_K, svd_V):
     print('Compression Ratio: ', full_KV_memory/(compressed_KV_memory))
     return r_range, attention_errors, compressed_KV_memory, full_KV_memory
 
-    plt.plot(range(12), attention_errors)
-    plt.xlabel('Layer')
-    plt.ylabel('Attention Error at r=16')
-    plt.title('Compressibility by Layer')
-    plt.show()
-
-x = compression_experiment(Q_layers, K_layers, V_layers, svd_K, svd_V)
+r_range, attention_errors, compressed_KV_memory, full_KV_memory = compression_experiment(Q_layers, K_layers, V_layers, svd_K, svd_V)
+    
+plt.plot(range(12), attention_errors)
+plt.xlabel('Layer')
+plt.ylabel('Attention Error at r=16')
+plt.title('Compressibility by Layer')
+plt.show()
 # print(x)
 

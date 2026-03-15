@@ -17,9 +17,6 @@ def extract_qkv():
     def hook_V(module, input, output):
         V_matrices.append(output)  
 
-    Q_layers = []
-    K_layers = []
-    V_layers = []
     for i in range(12):    
         model.encoder.layer[i].attention.self.query.register_forward_hook(hook_Q)
         model.encoder.layer[i].attention.self.key.register_forward_hook(hook_K)
@@ -32,17 +29,20 @@ def extract_qkv():
     outputs = model(**inputs)
     seq_len = inputs["input_ids"].shape[1]
     
+    Q_layers = []
+    K_layers = []
+    V_layers = []
     for i in range(12):
         Q = Q_matrices[i]
         Q = Q.reshape(1, seq_len, 12, 64).transpose(1,2)
-        Q_layers.append(Q[0,0,:,:].detach().numpy())
+        Q_layers.append(Q[0,:,:,:].detach().numpy())
 
         K = K_matrices[i]
         K = K.reshape(1, seq_len, 12, 64).transpose(1,2)
-        K_layers.append(K[0,0,:,:].detach().numpy())
+        K_layers.append(K[0,:,:,:].detach().numpy())
 
         V = V_matrices[i]
         V = V.reshape(1, seq_len, 12, 64).transpose(1,2)
-        V_layers.append(V[0,0,:,:].detach().numpy())
+        V_layers.append(V[0,:,:,:].detach().numpy())
 
     return outputs, Q_layers, K_layers, V_layers
